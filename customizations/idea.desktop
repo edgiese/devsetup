@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Intellij
+Comment=Intellj IDE
+Exec=/opt/intellij/idea/latest/bin/idea.sh
+Icon=/opt/intellij/idea/latest/bin/idea.png
+Terminal=false
+Type=Application
+StartupNotify=false
