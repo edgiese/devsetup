@@ -1,13 +1,15 @@
-## `prune` Customization
+`prune` Customization
+=====================
+Removes libre office and thunderbird, does update.
 
-This customization prunes unused applications from the dev environment and performs updates.
+## Method
+Uses apt-get remove with the `purge` option.
 
-### Method
-
-### Customizations
-
+## Customizations
 (None)
 
-### Itempotent
+## Notes
+No dependencies.
 
-Yes
+Originally this customization included an apt-get updgrade, but that upgrade
+often invokes the grub "set device" dialog which breaks everything.
