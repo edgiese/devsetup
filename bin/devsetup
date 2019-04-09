@@ -1,0 +1,67 @@
+#!/bin/bash
+# main devsetup command
+set -e
+
+if [ $# == 0 ]; then
+    printf "Usage: devsetup command [options]\n\
+commands:\n\
+  help -- show available customizations then exit\n\
+  create filename customization[s] -- create new file\n\
+  run filename -- run custom filename\n\
+  default customization[s] -- run customizations with defaults\n"
+  exit 0  
+fi
+
+export devsetup_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+    
+case $1 in
+"help")
+    cd $devsetup_dir
+    cd ../customizations
+    echo "Available Customizations:"
+    for dir in $(ls -d */ ); do \
+        line=$(head -n 1 ${dir}oneline.txt)
+        echo "${dir%?} -- $line"; \
+    done
+    ;;
+"create")
+    $devsetup_dir/make_env.sh "${@:2}"
+    ;;
+"run")
+    if [ "$#" = 1 ]; then
+        $devsetup_dir/devsetup
+        exit 1
+    fi
+
+    # fully qualify env file so that we can run as bash without prefix
+    devsetup_envfile="$(cd "$(dirname "$2")"; pwd -P)/$(basename "$2")"
+
+    if [ "$#" = 2 ]; then
+        # get customizations from env file
+        . "$devsetup_envfile"
+        customizations="$devsetup_customizations"
+    else
+        # get customizations from command line
+        customizations="${@:3}"
+    fi
+    echo "$customizations"
+
+    # sets environment to defaults
+    . $devsetup_dir/set_defaults.sh $customizations
+    # overwrite with env file
+    . "$devsetup_envfile"
+
+    $devsetup_dir/run_using_env.sh $customizations
+    ;;
+"default")
+    if [ "$#" = 1 ]; then
+        $devsetup_dir/devsetup
+        exit 1
+    fi
+    . $devsetup_dir/set_defaults.sh "${@:2}"
+    $devsetup_dir/run_using_env.sh "${@:2}"
+    ;;
+*)
+    $devsetup_dir/devsetup
+esac
+

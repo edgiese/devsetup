@@ -1,0 +1,1 @@
+removes libre office and thunderbird, does update & upgrade

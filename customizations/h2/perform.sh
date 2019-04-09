@@ -1,11 +1,17 @@
 #!/bin/bash
-set -e
 
 rm -rf ~/Downloads/h2.zip
-wget -O ~/Downloads/h2.zip ${devsetup_h2_downloadfile}
-sudo rm -rf /opt/h2
+wget -O ~/Downloads/h2.zip ${devsetup_h2_downloadfileurl}
+if [ -d "/opt/h2" ]; then
+    sudo rm -rf /opt/h2
+fi
 
-sudo mkdir /opt/h2
-sudo unzip ~/Downloads/h2.zip -d /opt/h2
+if [ -d "/tmp/h2" ]; then
+    sudo rm -rf /tmp/h2
+fi
+
+unzip ~/Downloads/h2.zip -d /tmp/h2
+sudo mv /tmp/h2/h2 /opt/h2
 sudo chmod +x /opt/h2/bin/h2.sh
 rm -rf ~/Downloads/h2.zip
+rm -rf /tmp/h2
