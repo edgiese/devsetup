@@ -1,5 +1,15 @@
 #!/bin/bash
 
+if [ -z "$devsetup_h2_downloadfileurl" ]; then
+    echo "Must set devsetup_h2_downloadfileurl"
+    exit 1
+fi
+
+# required 'check' code
+if [ $1 == "check" ]; then
+    exit 0
+fi
+
 rm -rf ~/Downloads/h2.zip
 wget -O ~/Downloads/h2.zip ${devsetup_h2_downloadfileurl}
 if [ -d "/opt/h2" ]; then

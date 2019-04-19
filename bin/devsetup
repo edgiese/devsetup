@@ -17,12 +17,20 @@ export devsetup_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 &&
 case $1 in
 "help")
     cd $devsetup_dir
-    cd ../customizations
-    echo "Available Customizations:"
-    for dir in $(ls -d */ ); do \
-        line=$(head -n 1 ${dir}oneline.txt)
-        echo "${dir%?} -- $line"; \
-    done
+    if [ $# == 2 ]; then
+        cat ../customizations/$2/README.md
+    else
+        cd ../customizations
+        echo "Available Customizations:"
+        for dir in $(ls -d */ ); do \
+            if [ -f ${dir}oneline.txt ]; then
+                line=$(head -n 1 ${dir}oneline.txt)
+            else
+                line="MISSING ONELINE.TXT"
+            fi
+            echo "${dir%?} -- $line"; \
+            done
+    fi
     ;;
 "create")
     $devsetup_dir/make_env.sh "${@:2}"

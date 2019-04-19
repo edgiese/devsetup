@@ -1,0 +1,1 @@
+Does simple call to apt to install basic tools
