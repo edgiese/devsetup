@@ -1,0 +1,1 @@
+Installs the user-specified version of Maven.

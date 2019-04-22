@@ -1,0 +1,1 @@
+Installs Intellij idea -- either community or ultimate
