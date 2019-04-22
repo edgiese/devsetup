@@ -1,3 +1,3 @@
 #
 # settings for template
-export devsetup_template_var1="MUS CHANGE"
+export devsetup_template_var1="MUST CHANGE"

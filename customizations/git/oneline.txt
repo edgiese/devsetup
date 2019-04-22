@@ -1,0 +1,1 @@
+Installs git if it's not installed and sets required parameters
