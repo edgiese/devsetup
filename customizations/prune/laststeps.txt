@@ -1,0 +1,6 @@
+* in Ubuntu Desktop Settings, do the following
+  * go to "Privacy" section and turn off screen lock
+  * go to "Power" section and turn off suspend
+  * go to "Keyboard" section and disable all function keys that might conflict with intellij
+  * go to "Details" section for the "vagrant" user and turn on automatic login
+* from this terminal run "sudo apt upgrade"

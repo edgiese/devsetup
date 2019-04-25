@@ -4,7 +4,9 @@ if [ -z "$devsetup_intellij_idea_type" ]; then
     echo "Must set devsetup_intellij_idea_type"
     exit 1
 fi
+one_letter='U'
 if [ "$devsetup_intellij_idea_type" != "ultimate" ]; then
+    one_letter='C'
     if [ "$devsetup_intellij_idea_type" != "community" ]; then
         echo "Must set devsetup_intellij_idea_type to 'ultimate' or 'community'"
         exit 1

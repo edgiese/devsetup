@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Oracle SQL Developer
+Icon=/opt/sqldeveloper/icon.png
+Exec=/opt/sqldeveloper/sqldeveloper/bin/sqldeveloper
+Comment=Full Featured Interactive SQL Tool
+Categories=Development;IDE;
+Terminal=false
