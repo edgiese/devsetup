@@ -1,11 +1,7 @@
 #!/bin/bash
 
-if [ -z "$devsetup_template_var1" ]; then
-    echo "Must set devsetup_template_var1"
-    exit 1
-fi
-if [ "$devsetup_template_var1" == "MUST CHANGE" ]; then
-    echo "Must override devsetup_template_var1"
+if [ -z "$devsetup_oracledb_version" ]; then
+    echo "Must set devsetup_oracledb_version"
     exit 1
 fi
 
@@ -15,4 +11,6 @@ if [ $1 == "check" ]; then
 fi
 
 # perform action (default)
-echo "Template -- no action"
+image_name="store/oracle/database-enterprise:${devsetup_oracledb_version}${devsetup_oracledb_slim}"
+docker pull ${image_name}
+

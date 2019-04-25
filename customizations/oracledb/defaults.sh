@@ -1,3 +1,4 @@
 #
-# settings for template
-export devsetup_template_var1="MUST CHANGE"
+# settings for oracledb
+export devsetup_oracledb_version="12.2.0.1"
+export devsetup_oracledb_slim="-slim"

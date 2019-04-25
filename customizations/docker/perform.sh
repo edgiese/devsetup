@@ -13,3 +13,7 @@ sudo apt update
 apt-cache policy docker-ce
 sudo apt install -y docker-ce
 sudo usermod -aG docker vagrant
+
+if [[ ! -z "$devsetup_docker_user" && ! -z "$devsetup_docker_password" && "$devsetup_docker_user" != "none" && "$devsetup_docker_password" != "none" ]]; then
+    docker login --username=$devsetup_docker_user --password="$devsetup_docker_password"
+fi
