@@ -21,7 +21,7 @@ rm maven.tar.gz
 
 sudo rm /etc/profile.d/mavenenv.sh
 sudo bash -c 'echo "export M2_HOME=/opt/maven" > /etc/profile.d/mavenenv.sh'
-sudo bash -c 'echo "export PATH=/opt/maven/bin:\$\{PATH\}" >> /etc/profile.d/mavenenv.sh'
+sudo bash -c 'echo "export PATH=\$PATH:/opt/maven/bin" >> /etc/profile.d/mavenenv.sh'
 sudo chmod +x /etc/profile.d/mavenenv.sh
 source /etc/profile.d/mavenenv.sh
 
