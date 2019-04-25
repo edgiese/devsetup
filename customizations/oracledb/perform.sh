@@ -12,5 +12,5 @@ fi
 
 # perform action (default)
 image_name="store/oracle/database-enterprise:${devsetup_oracledb_version}${devsetup_oracledb_slim}"
-docker pull ${image_name}
+sudo docker pull ${image_name}
 
