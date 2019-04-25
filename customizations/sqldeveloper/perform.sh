@@ -29,13 +29,22 @@ rm "$zip_file_name"
 echo "SetJavaHome ${devsetup_sqldeveloper_sdk}" > ~/.sqldeveloper/${devsetup_sqldeveloper_short_version}/product.conf
 
 sudo rm /etc/profile.d/sqldeveloper.sh
-sudo bash -c 'echo "export PATH=\$\{PATH\}:/opt/sqldeveloper/sqldeveloper/bin" >> /etc/profile.d/sqldeveloper.sh'
+sudo bash -c 'echo "export PATH=\$PATH:/opt/sqldeveloper/sqldeveloper/bin" >> /etc/profile.d/sqldeveloper.sh'
 sudo chmod +x /etc/profile.d/sqldeveloper.sh
 
 cd $devsetup_dir
 cp ../customizations/sqldeveloper/sqldeveloper.desktop ~/.local/share/applications
 sudo gtk-update-icon-cache
+sudo apt install -y --allow-downgrades --allow-change-held-packages libopenjfx-java=8u161-b12-1ubuntu2
+sudo apt-mark hold libopenjfx-java
+sudo apt install -y --allow-downgrades --allow-change-held-packages libopenjfx-jni=8u161-b12-1ubuntu2
+sudo apt-mark hold libopenjfx-jni
+sudo apt install -y --allow-downgrades --allow-change-held-packages openjfx=8u161-b12-1ubuntu2
+sudo apt-mark hold openjfx
 
 sudo apt install -y libopenjfx-java=8u161-b12-1ubuntu2
+sudo apt-mark hold libopenjfx-java
 sudo apt install -y libopenjfx-jni=8u161-b12-1ubuntu2
+sudo apt-mark hold libopenjfx-jni
 sudo apt install -y openjfx=8u161-b12-1ubuntu2
+sudo apt-mark hold openjfx
