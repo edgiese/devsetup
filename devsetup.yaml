@@ -1,0 +1,176 @@
+---
+# Playbook is designed to set up a single development environment by leveraging roles from
+# ansible galaxy.
+# 
+- hosts: dev_machines
+  gather_facts: true
+  vars:
+    - nvm_version: v0.38.0
+    - nvm_node_version: 14.17.0
+    - sdkman_install_packages:
+      - { candidate: java, version: '8.0.292-zulu' }
+      - { candidate: gradle, version: '7.0.2' }
+      - { candidate: maven, version: '3.8.1' }
+      - { candidate: sbt, version: '1.5.3' }
+      - { candidate: scala, version: '3.0.0' }
+    - git_user_name: "Ed Giese"
+    - git_user_email: "edgiese@gmail.com"    
+
+  tasks:
+    # not sure this is necessary, but it creates a directory that apt may need      
+    - name: ensure apt list dir exists
+      file:
+        path: /var/lib/apt/lists/
+        state: directory
+        mode: 0755
+    
+    - name: remove libre office
+      become: yes
+      apt: 
+        state: absent
+        pkg: libreoffice*
+        purge: yes
+
+    - name: remove thunderbird
+      become: yes
+      apt: 
+        state: absent
+        pkg: thunderbird*
+        purge: yes
+
+    - name: update all the apt repositories
+      become: yes
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+    - name: upgrade all the packages
+      become: yes
+      apt: upgrade=full
+
+    - name: add pip3
+      become: yes
+      apt: pkg=python3-pip
+
+    - name: add psutil package in pip
+      pip: name=psutil  
+
+    - name: Set gnome to auto login as vagrant user LINE1
+      become: yes
+      ansible.builtin.lineinfile:
+        path: /etc/gdm3/custom.conf
+        regexp: '^AutomaticLoginEnable='
+        insertafter: '^\[daemon\]'
+        line: AutomaticLoginEnable=True
+
+    - name: Set gnome to auto login as vagrant user LINE2
+      become: yes
+      ansible.builtin.lineinfile:
+        path: /etc/gdm3/custom.conf
+        regexp: '^AutomaticLogin='
+        insertafter: '^\[daemon\]'
+        line: AutomaticLogin=vagrant
+
+    - name: Configure no timeout on AC
+      community.general.dconf:
+        key: "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type"
+        value: "'nothing'"
+        state: present
+
+    - name: Configure no timeout on Battery
+      community.general.dconf:
+        key: "/org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-type"
+        value: "'nothing'"
+        state: present
+
+    - name: Configure no idle delay
+      community.general.dconf:
+        key: "/org/gnome/desktop/session/idle-delay"
+        value: "uint32 0"
+        state: present
+
+    - name: add vim
+      become: yes
+      apt: pkg=vim
+
+    - name: check out dotvim
+      ansible.builtin.git:
+        repo: https://github.com/edgiese/dotvim
+        dest: /home/vagrant/.vim
+
+    - name: point vim to checked out dotvim
+      ansible.builtin.file:
+        src: /home/vagrant/.vim/vimrc
+        dest: /home/vagrant/.vimrc
+        owner: vagrant
+        state: link     
+
+    - name: activate vim bundles    
+      shell: 'vim -E -s -c "source ~/.vimrc" +BundleInstall +qall'
+
+    - name: add curl
+      become: yes
+      apt: pkg=curl
+
+    - name: add wget
+      become: yes
+      apt: pkg=wget
+
+    - name: add exuberant ctags
+      become: yes
+      apt: pkg=exuberant-ctags
+
+    - name: add git
+      become: yes
+      apt: pkg=git
+
+    - name: set git username
+      community.general.git_config:
+        name: user.name
+        scope: global
+        value: '{{ git_user_name }}'      
+
+    - name: set git email
+      community.general.git_config:
+        name: user.email
+        scope: global
+        value: '{{ git_user_email }}'      
+
+    - name: add node js
+      include_role:
+        name: moviedo.nvm
+      vars:  
+        nvm_user: vagrant
+        # nvm_version: "v0.38.0"
+        # nvm_node_version: "14.17.0"
+
+    - name: add java, maven, gradle, sbt, scala
+      include_role:
+        name: comcast.sdkman
+      vars:
+        sdkman_user: vagrant
+        sdkman_group: vagrant
+        sdkman_auto_answer: true
+        sdkman_update: true
+        # sdkman_install_packages:
+        #   - { candidate: java, version: 8.0.202-zulu }
+        #   - { candidate: gradle, version: '7.0.2' }
+        #   - { candidate: maven, version: '3.8.1' }
+        sdkman_flush_caches_after:
+          - archives
+          - broadcast
+          - candidates
+          - temp
+        sdkman_offline_mode: false
+        sdkman_update_alternatives:
+          - candidate: java
+            name: java
+            link: /usr/bin/java
+          - candidate: java
+            name: javac
+            link: /usr/bin/javac
+
+    - name: install intellij idea
+      become: yes
+      community.general.snap:
+        name: intellij-idea-ultimate
+        classic: yes
+
