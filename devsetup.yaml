@@ -2,7 +2,7 @@
 # Playbook is designed to set up a single development environment by leveraging roles from
 # ansible galaxy.
 # 
-- hosts: dev_machines
+- hosts: localhost
   gather_facts: true
   vars:
     - nvm_version: v0.38.0
